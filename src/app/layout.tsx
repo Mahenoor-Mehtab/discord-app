@@ -1,4 +1,5 @@
 import { type Metadata } from 'next'
+import { cn } from '@/lib/utils';
 import {
   ClerkProvider,
   SignInButton,
@@ -29,7 +30,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${font.variable}  antialiased`}>
+        <body className={cn(font.variable , "antialiased" , "bg-white dark:bg-[#38393a]")}>
           
           <header className="flex justify-end items-center p-4 gap-4 h-16">
             <h2 className='text-3xl text-blue-700 text-left'>Discord</h2>
@@ -49,6 +50,7 @@ export default function RootLayout({
         <ThemeProvider
         attribute="class"
         defaultTheme="system"
+        // forcedTheme='dark'
         enableSystem
         disableTransitionOnChange
        >
@@ -61,3 +63,6 @@ export default function RootLayout({
     </ClerkProvider>
   )
 }
+
+
+// suppressHydrationWarning:  “React, please ignore the mismatch warnings inside this component / element. I know they will be different. Don't show hydration error.”
