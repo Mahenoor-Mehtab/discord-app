@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
@@ -21,7 +21,9 @@ model Profile {
   imageUrl String @db.Text
   email String @db.Text
 
-    servers Server[]
+   servers Server[]
+   members Member[]
+   channels Channel[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -36,8 +38,62 @@ model Server {
   profileId String
   profile Profile @relation(fields: [profileId], references: [id] , onDelete: Cascade)
 
+ members Member[]
+ channels Channel[]
+
  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([profileId])
 }
+
+enum MemberRole{
+  ADMIN 
+  MODERATOR
+  GUEST
+}
+
+model Member{
+  id String @id @default(uuid())
+  role MemberRole @default(GUEST)
+   profileId String
+   profile Profile @relation(fields: [profileId] , references:[id] , onDelete: Cascade)
+
+   serverId String
+   server Server @relation(fields:[serverId] , references:[id], onDelete: Cascade)
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@index([serverId])
+}
+
+enum ChannelType{
+  TEXT 
+  AUDIO
+  VIDEO
+}
+
+model Channel {
+  id String @id @default(uuid())
+  name String
+  type ChannelType @default(TEXT)
+
+ profileId String
+ profile Profile @relation(fields:[profileId] , references:[id] , onDelete : Cascade)
+
+ serverId String
+ server Server @relation(fields :[serverId] , references:[id] , onDelete : Cascade)
+
+ createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt  
+
+ @@index([profileId])
+ @@index([serverId])
+}
+
+// - prisma init → creates the folder & config (prisma/schema.prisma) to start with.
+// - schema.prisma → you define your database structure (tables, columns, relations).
+// - prisma generate → generates Prisma Client code, which is a JS/TS library to interact with your DB easily.
+// - prisma db push → actually creates the tables in the database according to your schema.
