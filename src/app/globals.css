@@ -8,33 +8,6 @@ body,
 }
 
 
-[data-state="ready"] .ut-button-container,
-.ut-button-container {
-  height: auto !important;
-  min-height: 40px !important;
-}
-
-.ut-upload-icon {
-  width: 40px !important;
-  height: 40px !important;
-}
-
-.ut-allowed-content {
-  height: auto !important;
-  margin: 8px 0 !important;
-}
-
-[role="presentation"] {
-  min-height: 120px !important;
-  max-height: 140px !important;
-}
-.ut-button {
-  width: 100% !important;
-}
-
-.ut-allowed-content {
-  display: none;
-}
 
 @custom-variant dark (&:is(.dark *));
 
