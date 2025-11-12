@@ -2,6 +2,9 @@
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
 
 import {
   Dialog,
@@ -36,6 +39,7 @@ const formschema = z.object({
 });
 
 const InitialModal = () => {
+  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(formschema),
     defaultValues: {
@@ -47,13 +51,20 @@ const InitialModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formschema>) => {
-    console.log(values);
+    try {
+      await axios.post("/api/servers", values);
+      form.reset();
+      router.refresh();
+      window.location.reload();
+    } catch(error){
+      console.log(error);
+    }
   };
 
   return (
     <>
       <Dialog open>
-        <DialogContent className="bg-white text-black p-0 overflow-hidden flex flex-row ">
+        <DialogContent className="  bg-white text-black p-0 overflow-hidden flex flex-row ">
           <DialogHeader className="pt-8 px-6">
             <DialogTitle className="text-2xl text-center font-bold">
               Customize your server
@@ -62,13 +73,14 @@ const InitialModal = () => {
               Give your server a personality with a name and an image. You can
               alaways change it later.
             </DialogDescription>
-           
           </DialogHeader>
-          
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              
               <div className="space-y-8 px-6">
-                <div className="flex items-center justify-center text-center">
+                <div className="flex flex-row items-center justify-center text-center">
+                  
                   <FormField
                     control={form.control}
                     name="imageUrl"
@@ -86,7 +98,8 @@ const InitialModal = () => {
                   />
                 </div>
 
-                <FormField
+              <div className="flex flex-row">
+                  <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => {
@@ -108,16 +121,17 @@ const InitialModal = () => {
                     );
                   }}
                 />
-              </div>
-               <DialogFooter className="bg-gray-100 px-6 py-4">
+                 <DialogFooter className="bg-gray-100 px-6 py-4">
                 <Button disabled={isLoading} variant="primary">
                   Create
                 </Button>
               </DialogFooter>
+              </div>
+                
+              </div>
              
             </form>
           </Form>
-           
         </DialogContent>
       </Dialog>
     </>
