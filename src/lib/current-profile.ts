@@ -15,4 +15,4 @@ export const currentProfile = async () => {
     return profile;
 };
 
-// in this used to check all the user and server compoent to check the current profile 
+// in this used to check all the user and server component  check in  the current profile 
